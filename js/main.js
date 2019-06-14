@@ -43,30 +43,38 @@ class Bord {
       while (i--) {
         curX = ((+i + 1) % +x) || 10;
         curY = +Math.trunc((+i) / +y) + 1;
-        window.console.log(`i = ${i}; y = ${y}; curX = ${+i % +y}`);
+        // window.console.log(`i = ${i}; y = ${y}; curX = ${+i % +y}`);
 
         fields[i].setAttribute('posX', curX);
         fields[i].setAttribute('posY', curY);
       }
     }
 
-    this.snake = new Snake(3);
-    this.food = new Food();
+    this.snake = new Snake(3, this);
+    this.food = new Food(this);
   }
 
   startGame() {
-      setInterval(() => this.snake.move(),500);
+      this.game = setInterval(() => this.snake.move(),500);
+  }
+
+  endGame() {
+    alert ('Гейм овер!');
+    clearInterval(this.game);
+  }
+
+  eat() {
+    this.food.eat();
   }
 }
 
-class Snake extends Bord{
+class Snake {
 
-  constructor(snakeLength) {
+  constructor(snakeLength, context) {
     let posX = Math.round((Math.random() * (10 - snakeLength)) + snakeLength),
       posY = Math.round((Math.random() * (10 - snakeLength)) + 1);
 
-    super();
-
+    this.border = context;
     this.direction = 'r';
 
     this.snakeBody = {
@@ -157,39 +165,86 @@ class Snake extends Bord{
       newHeadPos.y = oldHeadPos.y  % 10 + 1;
     }
 
-      newTail.classList.remove('snake-head', 'snake-body');
-      newTail.classList.add('snake-tail');
-      this.snakeBody.tail.unshift(newTail);
+      newTail.classList.remove('snake-head', 'snake-body', 'snake-head-right', 'snake-head-left',
+        'snake-head-down', 'snake-head-up');
 
+      newTail.classList.add('snake-tail');
+
+      this.snakeBody.tail.unshift(newTail);
       this.snakeBody.tail[this.snakeBody.tail.length - 1].classList.remove('snake-tail', 'snake-body');
       this.snakeBody.tail.pop();
 
       newHead = this.snakeBody.head = document.querySelector(`[posX = "${newHeadPos.x}"][posY = "${newHeadPos.y}"]`);
       newHead.classList.add('snake-body', 'snake-head');
 
-      this.eatFood(newHead)
+    this.snakeEatYourself();
+    this.rotateHead();
+    this.eatFood(newHead)
 
   }
 
   eatFood(snakeHead) {
     if (snakeHead && snakeHead.classList.contains('food')) {
-      alert('Eat!');
+      this.snakeRise();
+      this.border.eat();
       // this.food.removeFood();
     }
   }
 
   rotateHead() {
+    let head = this.snakeBody.head;
 
+    head.classList.remove('snake-head-right', 'snake-head-left', 'snake-head-down', 'snake-head-up');
+
+    switch (this.direction) {
+      case "r":
+        head.classList.add('snake-head-right');
+        break;
+      case "l":
+        head.classList.add('snake-head-left');
+        break;
+      case "d":
+        head.classList.add('snake-head-down');
+        break;
+      case "u":
+        head.classList.add('snake-head-up');
+        break;
+
+    }
+  }
+
+  snakeRise() {
+    let tail = this.snakeBody.tail,
+      newTailX,
+      newTailY;
+
+    newTailX = tail[tail.length - 1].getAttribute('posX');
+    newTailY =tail[tail.length - 1].getAttribute('posY');
+
+    tail.push(document.querySelector(`[posX = "${newTailX}"][posY = "${newTailY}"]`));
+
+  }
+
+  snakeEatYourself() {
+    let head = this.snakeBody.head;
+
+    if (head.classList.contains('snake-tail'))  {
+      this.border.endGame();
+    }
   }
 }
 
-class Food extends Bord{
-  constructor() {
+class Food {
+  constructor(context) {
+    this.border = context;
+
+    this.createFood();
+  }
+
+  createFood() {
     let posX,
       posY,
       coordinates;
-
-    super();
 
     for (let i = 100; i--;) {
       coordinates = generateCoordinates();
@@ -211,7 +266,9 @@ class Food extends Bord{
     }
   }
 
-  removeFood() {
+  eat() {
     this.food.classList.remove('food');
+
+    this.createFood();
   }
 }
