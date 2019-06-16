@@ -1,18 +1,22 @@
 class Bord {
 
   constructor(x = 10, y = 10) {
+    let borderClassName = 'border';
 
-    this.border = createBorder();
+    this.table = createScoreTable();
+    this.border = createBorder(this.table);
     this.fields = createFields(this.border, x, y);
+    this.score = 0;
 
     setCoordinates(this.fields, x, y);
 
-    function createBorder() {
+    function createBorder(table) {
       let border;
 
       border = document.createElement('div');
-      border.classList.add('border');
+      border.classList.add(borderClassName);
 
+      document.body.appendChild(table);
       document.body.appendChild(border);
 
       return border;
@@ -35,6 +39,19 @@ class Bord {
       return fields;
     }
 
+    function createGameButton() {
+
+    }
+
+    function createScoreTable() {
+      let table = document.createElement('div');
+
+      table.classList.add('score-table');
+      table.innerHTML = '0';
+
+      return table;
+    }
+
     function setCoordinates(fields, x, y) {
       let i = fields.length,
         curX,
@@ -54,6 +71,12 @@ class Bord {
     this.food = new Food(this);
   }
 
+  addScore() {
+    this.score += 1;
+    window.console.log(this.score);
+    this.table.innerHTML = this.score;
+  }
+
   startGame() {
       this.game = setInterval(() => this.snake.move(),500);
   }
@@ -65,6 +88,7 @@ class Bord {
 
   eat() {
     this.food.eat();
+    this.addScore()
   }
 }
 

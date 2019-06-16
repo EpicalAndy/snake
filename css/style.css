@@ -55,3 +55,14 @@ body {
 	background-color: crimson;
 	border-radius: 50px;
 }
+
+.score-table {
+	display: block;
+	height: 40px;
+	width: 60px;
+	border: crimson solid 2px;
+	border-radius: 2px;
+	margin: 20px auto;
+	font-size: 20px;
+	padding: 7px 14px;
+}
