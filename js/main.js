@@ -1,26 +1,50 @@
+/*jslint
+    es6
+*/
+
 class Bord {
 
   constructor(x = 10, y = 10) {
-    let borderClassName = 'border';
+    let borderClassName = 'border',
+    rootElmSelector = '#game-place',
+    gameObjects = createGamePlace();
 
-    this.table = createScoreTable();
-    this.border = createBorder(this.table);
-    this.fields = createFields(this.border, x, y);
+    this.table = gameObjects.table;
+    this.border = gameObjects.border;
+    this.fields = gameObjects.fields;
+    this.button = gameObjects.button;
+    this.gameStarted = false;
     this.score = 0;
 
     setCoordinates(this.fields, x, y);
 
-    function createBorder(table) {
+    function createGamePlace() {
+      let rootElm = document.querySelector(rootElmSelector),
+        table,
+        border,
+        fields,
+        controls,
+        button,
+        score;
+
+      controls = rootElm.appendChild(createControlsPlace());
+      border = rootElm.appendChild(createBorder());
+      fields = createFields(border, x, y);
+      button = controls.appendChild(createGameButton());
+      table = controls.appendChild(createScoreTable());
+
+      return {table, border, fields, button};
+    }
+
+    function createBorder() {
       let border;
 
       border = document.createElement('div');
       border.classList.add(borderClassName);
 
-      document.body.appendChild(table);
-      document.body.appendChild(border);
-
       return border;
     }
+
 
     function createFields(border, x, y) {
       let i = x * y,
@@ -39,8 +63,23 @@ class Bord {
       return fields;
     }
 
-    function createGameButton() {
+    function createControlsPlace() {
+      let controls = document.createElement('div');
 
+      controls.classList.add('game-controls');
+
+      return controls;
+    }
+
+    function createGameButton() {
+      let button = document.createElement('button');
+
+      button.setAttribute('type', 'button');
+      button.setAttribute('id', 'game-control');
+      button.innerHTML = 'Начать';
+      button.classList.add('game-button');
+
+      return button;
     }
 
     function createScoreTable() {
@@ -77,12 +116,29 @@ class Bord {
     this.table.innerHTML = this.score;
   }
 
+  buttonActions() {
+    if (this.gameStarted) {
+      this.pauseGame();
+    }
+    else {
+      this.startGame();
+    }
+
+    this.gameStarted = !this.gameStarted;
+  }
+
   startGame() {
       this.game = setInterval(() => this.snake.move(),500);
+      this.button.innerHTML = 'Пауза';
+  }
+
+  pauseGame() {
+    this.button.innerHTML = 'Продолжить';
+    clearInterval(this.game)
   }
 
   endGame() {
-    alert ('Гейм овер!');
+    alert (`Игра окончена. Вы набрали: ${this.score}`);
     clearInterval(this.game);
   }
 
