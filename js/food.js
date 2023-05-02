@@ -2,11 +2,12 @@
     es6
 */
 
-
+const colors = [ 'red', 'blue', 'green', 'aliceblue', 'orange', 'lime', 'purple', 'yellow', 'lightcoral', 'gray' ];
 
 class Food {
   constructor(context) {
     this.border = context;
+    this.color = '';
 
     this.createFood();
   }
@@ -25,6 +26,8 @@ class Food {
       }
 
       this.food.classList.add('food');
+      this.color = this.getRandomColor();
+      this.food.style.backgroundColor = this.color;
       break;
     }
 
@@ -32,12 +35,19 @@ class Food {
       posX = Math.round((Math.random() * (9)) + 1);
       posY = Math.round((Math.random() * (9)) + 1);
 
-      return {posX, posY};
+      return { posX, posY };
     }
+  }
+
+  getRandomColor() {
+    const index = Math.floor(Math.random() * colors.length);
+
+    return colors[index];
   }
 
   eat() {
     this.food.classList.remove('food');
+    this.food.style.backgroundColor = '';
 
     this.createFood();
   }

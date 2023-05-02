@@ -1,20 +1,24 @@
 class Snake {
 
-  constructor(snakeLength, context) {
+  constructor(snakeLength, context = document) {
     let posX = Math.round((Math.random() * (10 - snakeLength)) + snakeLength),
       posY = Math.round((Math.random() * (10 - snakeLength)) + 1);
 
-    this.border = context;
+    this.border = context?.border;
+    this.context = context;
     this.direction = 'r';
     this.isSnakeRised = false;
-
+    this.snakeParts = [ new SnakePart(posX, posY, 'coral') ];
+    debugger
     this.snakeBody = {
-      head: document.querySelector(`[posX = "${posX}"][posY = "${posY}"]`),
+      head: this.border.querySelector(`[posX = "${posX}"][posY = "${posY}"]`),
       tail: []
     };
 
     for (let i = snakeLength - 1, k = 1; k <= i; k++) {
-      this.snakeBody.tail.push(document.querySelector(`[posX = "${posX - k}"][posY = "${posY}"]`))
+      this.snakeBody.tail.push(this.border.querySelector(`[posX = "${posX - k}"][posY = "${posY}"]`));
+
+      this.snakeParts.push(new SnakePart(posX - k, posY, 'chocolate'));
     }
 
     this.snakeBody.head.classList.add('snake-head', 'snake-body');
@@ -122,7 +126,7 @@ class Snake {
     if (snakeHead && snakeHead.classList.contains('food')) {
       this.isSnakeRised = true;
 
-      this.border.eat();
+      this.context.eat();
     }
   }
 
@@ -153,7 +157,33 @@ class Snake {
     let head = this.snakeBody.head;
 
     if (head.classList.contains('snake-tail')) {
-      this.border.endGame();
+      this.context.endGame();
     }
+  }
+}
+
+class SnakePart {
+  constructor(x, y, color) {
+    this.elm = '';
+    this.color = '';
+    this.x = null;
+    this.y = null;
+
+    this.updatePart(x, y, color);
+  }
+
+  setColor(color = this.color) {
+    this.elm.style.backgroundColor = color;
+
+    this.color = color;
+  }
+
+  updatePart(x, y, color) {
+    this.x = x;
+    this.y = y;
+
+    this.elm = document.querySelector(`[posX = "${x}"][posY = "${y}"]`);
+
+    this.setColor(color);
   }
 }
