@@ -6,6 +6,7 @@ class Snake {
 
     this.border = context;
     this.direction = 'r';
+    this.isSnakeRised = false;
 
     this.snakeBody = {
       head: document.querySelector(`[posX = "${posX}"][posY = "${posY}"]`),
@@ -34,42 +35,42 @@ class Snake {
 
   // Определяет направление движения змеи по нажатию клавиш. Запрещено движение в противоположном направлении
   getSnakeDirection(e) {
-      window.console.log(`e.code = ${e.code}; e.code = ${e.keyCode}`);
-      switch (e.keyCode) {
-        // left
-        case 37:
-          if (this.direction !== 'r') {
-            this.direction = 'l';
-          }
-          break;
+    window.console.log(`e.code = ${e.code}; e.code = ${e.keyCode}`);
+    switch (e.keyCode) {
+      // left
+      case 37:
+        if (this.direction !== 'r') {
+          this.direction = 'l';
+        }
+        break;
 
-        // up
-        case 38:
-          if (this.direction !== 'd') {
-            this.direction = 'u';
-          }
-          break;
+      // up
+      case 38:
+        if (this.direction !== 'd') {
+          this.direction = 'u';
+        }
+        break;
 
-        // right
-        case 39:
-          if (this.direction !== 'l') {
-            this.direction = 'r';
-          }
-          break;
+      // right
+      case 39:
+        if (this.direction !== 'l') {
+          this.direction = 'r';
+        }
+        break;
 
-        // down
-        case 40:
-          if (this.direction !== 'u') {
-            this.direction = 'd';
-          }
-      }
+      // down
+      case 40:
+        if (this.direction !== 'u') {
+          this.direction = 'd';
+        }
+    }
   }
 
   // TODO Метод выглядит ужасно! Нужно от рефакторить!!!!
   move() {
     let newTail = document.querySelector('.snake-head'),
-      oldHeadPos = {x: null, y: null},
-      newHeadPos = {x: null, y: null},
+      oldHeadPos = { x: null, y: null },
+      newHeadPos = { x: null, y: null },
       newHead;
 
     oldHeadPos.x = +this.snakeBody.head.getAttribute('posX');
@@ -92,32 +93,36 @@ class Snake {
 
     if (this.direction === 'd') {
       newHeadPos.x = oldHeadPos.x;
-      newHeadPos.y = oldHeadPos.y  % 10 + 1;
+      newHeadPos.y = oldHeadPos.y % 10 + 1;
     }
 
-      newTail.classList.remove('snake-head', 'snake-body', 'snake-head-right', 'snake-head-left',
-        'snake-head-down', 'snake-head-up');
+    newTail.classList.remove('snake-head', 'snake-body', 'snake-head-right', 'snake-head-left',
+      'snake-head-down', 'snake-head-up');
 
-      newTail.classList.add('snake-tail');
+    newTail.classList.add('snake-tail');
 
-      this.snakeBody.tail.unshift(newTail);
+    this.snakeBody.tail.unshift(newTail);
+
+    if (this.isSnakeRised === false) {
       this.snakeBody.tail[this.snakeBody.tail.length - 1].classList.remove('snake-tail', 'snake-body');
       this.snakeBody.tail.pop();
+    }
 
-      newHead = this.snakeBody.head = document.querySelector(`[posX = "${newHeadPos.x}"][posY = "${newHeadPos.y}"]`);
-      newHead.classList.add('snake-body', 'snake-head');
+    newHead = this.snakeBody.head = document.querySelector(`[posX = "${newHeadPos.x}"][posY = "${newHeadPos.y}"]`);
+    newHead.classList.add('snake-body', 'snake-head');
 
     this.snakeEatYourself();
     this.rotateHead();
-    this.eatFood(newHead)
-
+    this.eatFood(newHead);
   }
 
   eatFood(snakeHead) {
+    this.isSnakeRised = false;
+
     if (snakeHead && snakeHead.classList.contains('food')) {
-      this.snakeRise();
+      this.isSnakeRised = true;
+
       this.border.eat();
-      // this.food.removeFood();
     }
   }
 
@@ -143,22 +148,11 @@ class Snake {
     }
   }
 
-  snakeRise() {
-    let tail = this.snakeBody.tail,
-      newTailX,
-      newTailY;
-
-    newTailX = tail[tail.length - 1].getAttribute('posX');
-    newTailY =tail[tail.length - 1].getAttribute('posY');
-
-    tail.push(document.querySelector(`[posX = "${newTailX}"][posY = "${newTailY}"]`));
-
-  }
 
   snakeEatYourself() {
     let head = this.snakeBody.head;
 
-    if (head.classList.contains('snake-tail'))  {
+    if (head.classList.contains('snake-tail')) {
       this.border.endGame();
     }
   }
