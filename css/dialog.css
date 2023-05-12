@@ -1,0 +1,57 @@
+.dialog::backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+
+}
+
+.dialog {
+  position: absolute;
+  top: 40%;
+  padding: 0;
+  background-color: #cccccc;
+  width: 12em;
+  height: 6em;
+  border: transparent solid 0;
+  border-radius: 5px;
+}
+
+.dialog-header {
+  position: relative;
+  height: 2em;
+  border-radius: unset;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #4676D7;
+
+}
+
+.dialog-header-title {
+  position: absolute;
+  left: 0;
+  padding: 8px;
+  border: unset;
+  border-radius: unset;
+}
+
+.dialog-header-close {
+  position: absolute;
+  right: 0;
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.2em;
+  border-radius: 50%;
+  border: transparent solid 1px;
+  padding: 8px;
+  line-height: 1em;
+  opacity: 0.8;
+}
+
+.dialog-header-close:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.dialog-body {
+  padding: 8px;
+}

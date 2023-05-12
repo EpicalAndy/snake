@@ -1,4 +1,4 @@
-let border = new Bord();
+let border = new Board();
 
 function runGame() {
   let button = document.getElementById('game-control');

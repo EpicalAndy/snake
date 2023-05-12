@@ -1,15 +1,14 @@
 class Snake {
-
-  constructor(snakeLength, context = document) {
+  constructor(snakeLength, context) {
     let posX = Math.round((Math.random() * (10 - snakeLength)) + snakeLength),
       posY = Math.round((Math.random() * (10 - snakeLength)) + 1);
 
-    this.border = context?.border;
+    this.border = context.border;
     this.context = context;
     this.direction = 'r';
     this.isSnakeRised = false;
     this.snakeParts = [ new SnakePart(posX, posY, 'coral') ];
-    debugger
+
     this.snakeBody = {
       head: this.border.querySelector(`[posX = "${posX}"][posY = "${posY}"]`),
       tail: []

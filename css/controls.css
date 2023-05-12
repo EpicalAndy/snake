@@ -9,6 +9,10 @@ body {
 	width: auto;
 }
 
+#game-place {
+	position: relative;
+}
+
 .border {
 	width: 500px;
 	height: 500px;
@@ -63,9 +67,15 @@ body {
 
 .game-button:hover {
   background: #1d49aa;
+	cursor: pointer;
 }
 
 .game-button:focus {
   outline: none;
   box-shadow: 0 0 0 4px #cbd6ee;
+}
+
+.game-button:disabled {
+	background-color: darkgray;
+	cursor: not-allowed;
 }
