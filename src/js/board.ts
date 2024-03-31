@@ -1,15 +1,16 @@
 import { Snake } from './snake.js'
 import { Food } from './food.js'
+import { Dialog } from './dialog.js'
 export class Board {
-  table: any;
-  elm: any;
-  border: any;
-  fields: any;
-  button: any;
+  table: HTMLElement | null;
+  elm: HTMLElement | null;
+  border: HTMLElement | null;
+  fields: Array<HTMLElement>;
+  button: HTMLButtonElement | null;
   gameStarted: boolean;
   score: number;
-  snake: any;
-  food: any;
+  snake: Snake;
+  food: Food;
   game: any;
 
   constructor(x = 10, y = 10) {
@@ -49,11 +50,11 @@ export class Board {
       button,
       score;
 
-    controls = rootElm.appendChild(this.createControlsPlace());
-    border = rootElm.appendChild(this.createBorder());
+    controls = rootElm && rootElm.appendChild(this.createControlsPlace());
+    border = rootElm && rootElm.appendChild(this.createBorder());
     fields = this.createFields(border, x, y);
-    button = controls.appendChild(this.createGameButton());
-    table = controls.appendChild(this.createScoreTable());
+    button = controls && controls.appendChild(this.createGameButton());
+    table = controls && controls.appendChild(this.createScoreTable());
 
     return { table, border, fields, button };
   }
@@ -121,7 +122,7 @@ export class Board {
   addScore() {
     this.score += 1;
     window.console.log(this.score);
-    this.table.innerHTML = this.score;
+    this.table && (this.table.innerHTML = this.score + '');
   }
 
   buttonActions() {
@@ -136,11 +137,11 @@ export class Board {
 
   startGame() {
     this.game = setInterval(() => this.snake.move(), 500);
-    this.button.innerHTML = 'Пауза';
+    this.button && (this.button.innerHTML = 'Пауза');
   }
 
   pauseGame() {
-    this.button.innerHTML = 'Продолжить';
+    this.button && (this.button.innerHTML = 'Продолжить');
     clearInterval(this.game)
   }
 
@@ -152,7 +153,7 @@ export class Board {
       body: `Набрано очков: ${this.score}`
     });
 
-    this.button.disabled = true;
+    this.button && (this.button.disabled = true);
     clearInterval(this.game);
   }
 

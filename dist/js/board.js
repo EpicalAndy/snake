@@ -1,5 +1,6 @@
 import { Snake } from './snake.js';
 import { Food } from './food.js';
+import { Dialog } from './dialog.js';
 export class Board {
     constructor(x = 10, y = 10) {
         const rootElmSelector = '#game-place';
@@ -24,11 +25,11 @@ export class Board {
     }
     createGamePlace(x, y) {
         let rootElm = this.elm, table, border, fields, controls, button, score;
-        controls = rootElm.appendChild(this.createControlsPlace());
-        border = rootElm.appendChild(this.createBorder());
+        controls = rootElm && rootElm.appendChild(this.createControlsPlace());
+        border = rootElm && rootElm.appendChild(this.createBorder());
         fields = this.createFields(border, x, y);
-        button = controls.appendChild(this.createGameButton());
-        table = controls.appendChild(this.createScoreTable());
+        button = controls && controls.appendChild(this.createGameButton());
+        table = controls && controls.appendChild(this.createScoreTable());
         return { table, border, fields, button };
     }
     createFields(border, x, y) {
@@ -73,7 +74,7 @@ export class Board {
     addScore() {
         this.score += 1;
         window.console.log(this.score);
-        this.table.innerHTML = this.score;
+        this.table && (this.table.innerHTML = this.score + '');
     }
     buttonActions() {
         if (this.gameStarted) {
@@ -86,10 +87,10 @@ export class Board {
     }
     startGame() {
         this.game = setInterval(() => this.snake.move(), 500);
-        this.button.innerHTML = 'Пауза';
+        this.button && (this.button.innerHTML = 'Пауза');
     }
     pauseGame() {
-        this.button.innerHTML = 'Продолжить';
+        this.button && (this.button.innerHTML = 'Продолжить');
         clearInterval(this.game);
     }
     endGame() {
@@ -99,7 +100,7 @@ export class Board {
             title: 'Игра окончена',
             body: `Набрано очков: ${this.score}`
         });
-        this.button.disabled = true;
+        this.button && (this.button.disabled = true);
         clearInterval(this.game);
     }
     eat() {
