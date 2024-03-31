@@ -1,11 +1,13 @@
+import { Board } from "./board.js";
+
 let border = new Board();
 
 function runGame() {
   let button = document.getElementById('game-control');
 
-  button.addEventListener('click', function () {
+  button && button.addEventListener('click', function () {
       border.buttonActions();
-  })
+  });
 }
 
 runGame();

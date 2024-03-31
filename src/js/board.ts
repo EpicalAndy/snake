@@ -1,4 +1,17 @@
-class Board {
+import { Snake } from './snake.js'
+import { Food } from './food.js'
+export class Board {
+  table: any;
+  elm: any;
+  border: any;
+  fields: any;
+  button: any;
+  gameStarted: boolean;
+  score: number;
+  snake: any;
+  food: any;
+  game: any;
+
   constructor(x = 10, y = 10) {
     const rootElmSelector = '#game-place';
     this.elm = document.querySelector(rootElmSelector);
@@ -27,7 +40,7 @@ class Board {
     return border;
   }
 
-  createGamePlace(x, y) {
+  createGamePlace(x: number, y: number) {
     let rootElm = this.elm,
       table,
       border,
@@ -45,7 +58,7 @@ class Board {
     return { table, border, fields, button };
   }
 
-  createFields(border, x, y) {
+  createFields(border: any, x: number, y: number) {
     let i = x * y,
       field,
       fields = [];
@@ -90,7 +103,7 @@ class Board {
     return table;
   }
 
-  setCoordinates(fields, x, y) {
+  setCoordinates(fields: any, x: number, y: number) {
     let i = fields.length,
       curX,
       curY;

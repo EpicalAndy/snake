@@ -4,8 +4,11 @@
 
 const colors = [ 'red', 'blue', 'green', 'aliceblue', 'orange', 'lime', 'purple', 'yellow', 'lightcoral', 'gray' ];
 
-class Food {
-  constructor(context) {
+export class Food {
+  border: any;
+  color: string;
+  food: any;
+  constructor(context: any) {
     this.border = context;
     this.color = '';
 

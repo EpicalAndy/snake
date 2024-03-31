@@ -1,5 +1,9 @@
 class Dialog {
-  constructor(props) {
+  initialProps: any;
+  elm: any;
+  dialogHeader: any;
+  dialogBody: any;
+  constructor(props: any) {
     this.initialProps = props;
 
     this.createDialogElm();

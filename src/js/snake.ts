@@ -1,5 +1,16 @@
-class Snake {
-  constructor(snakeLength, context) {
+import { SnakeTail } from "./snake-tail.js";
+
+export class Snake {
+  border: any;
+  context: any;
+  direction: any;
+  isSnakeRised: boolean;
+  snakeParts: Array<SnakePart>
+  _snakeTail: SnakeTail;
+  snakeBody: any
+
+
+  constructor(snakeLength: number = 0, context: any) {
     let posX = Math.round((Math.random() * (10 - snakeLength)) + snakeLength),
       posY = Math.round((Math.random() * (10 - snakeLength)) + 1);
 
@@ -8,6 +19,7 @@ class Snake {
     this.direction = 'r';
     this.isSnakeRised = false;
     this.snakeParts = [ new SnakePart(posX, posY, 'coral') ];
+    this._snakeTail = new SnakeTail();
 
     this.snakeBody = {
       head: this.border.querySelector(`[posX = "${posX}"][posY = "${posY}"]`),
@@ -16,6 +28,7 @@ class Snake {
 
     for (let i = snakeLength - 1, k = 1; k <= i; k++) {
       this.snakeBody.tail.push(this.border.querySelector(`[posX = "${posX - k}"][posY = "${posY}"]`));
+      this._snakeTail.addTail({color: ''});
 
       this.snakeParts.push(new SnakePart(posX - k, posY, 'chocolate'));
     }
@@ -26,10 +39,7 @@ class Snake {
       this.snakeBody.tail[i].classList.add('snake-tail', 'snake-body');
     }
 
-    window.console.log(`posX = ${posX}; posY = ${posY}; snakeBody.tail = ${this.snakeBody.tail.length}`);
-
     this.listenerDirection();
-    // this.setSnakeDirection(this.getSnakeDirection());
   }
 
   listenerDirection() {
@@ -37,7 +47,7 @@ class Snake {
   }
 
   // Определяет направление движения змеи по нажатию клавиш. Запрещено движение в противоположном направлении
-  getSnakeDirection(e) {
+  getSnakeDirection(e: any) {
     window.console.log(`e.code = ${e.code}; e.code = ${e.keyCode}`);
     switch (e.keyCode) {
       // left
@@ -71,9 +81,9 @@ class Snake {
 
   // TODO Метод выглядит ужасно! Нужно от рефакторить!!!!
   move() {
-    let newTail = document.querySelector('.snake-head'),
-      oldHeadPos = { x: null, y: null },
-      newHeadPos = { x: null, y: null },
+    let newTail: any = document.querySelector('.snake-head'),
+      oldHeadPos: any = { x: null, y: null },
+      newHeadPos: any = { x: null, y: null },
       newHead;
 
     oldHeadPos.x = +this.snakeBody.head.getAttribute('posX');
@@ -119,7 +129,7 @@ class Snake {
     this.eatFood(newHead);
   }
 
-  eatFood(snakeHead) {
+  eatFood(snakeHead: any) {
     this.isSnakeRised = false;
 
     if (snakeHead && snakeHead.classList.contains('food')) {
@@ -162,7 +172,11 @@ class Snake {
 }
 
 class SnakePart {
-  constructor(x, y, color) {
+  elm: any;
+  color: string;
+  x: number | null;
+  y: number | null;
+  constructor(x: number, y: number, color: string) {
     this.elm = '';
     this.color = '';
     this.x = null;
@@ -172,12 +186,12 @@ class SnakePart {
   }
 
   setColor(color = this.color) {
-    this.elm.style.backgroundColor = color;
+    /*this.elm.style.backgroundColor = color;
 
-    this.color = color;
+    this.color = color;*/
   }
 
-  updatePart(x, y, color) {
+  updatePart(x: number, y: number, color: string) {
     this.x = x;
     this.y = y;
 
