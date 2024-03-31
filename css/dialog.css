@@ -23,7 +23,6 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   background-color: #4676D7;
-
 }
 
 .dialog-header-title {
@@ -35,7 +34,7 @@
 }
 
 .dialog-header-close {
-  position: absolute;
+  position: fixed;
   right: 0;
   margin: 0;
   font-weight: bold;
