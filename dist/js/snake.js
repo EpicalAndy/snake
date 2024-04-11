@@ -7,14 +7,14 @@ export class Snake {
         this.direction = 'r';
         this.isSnakeRised = false;
         this.snakeParts = [new SnakePart(posX, posY, 'coral')];
-        this._snakeTail = new SnakeTail();
         this.snakeBody = {
             head: this.border.querySelector(`[posX = "${posX}"][posY = "${posY}"]`),
-            tail: []
+            tail: [],
+            _tail: new SnakeTail()
         };
         for (let i = snakeLength - 1, k = 1; k <= i; k++) {
             this.snakeBody.tail.push(this.border.querySelector(`[posX = "${posX - k}"][posY = "${posY}"]`));
-            this._snakeTail.addTail({ color: '' });
+            this.snakeBody._tail.addTail({ color: 'chocolate' });
             this.snakeParts.push(new SnakePart(posX - k, posY, 'chocolate'));
         }
         this.snakeBody.head.classList.add('snake-head', 'snake-body');
